@@ -6,7 +6,6 @@ import { Share } from "@/components/share";
 import { url } from "@/lib/metadata";
 
 const SIZE = 4;
-const TILE_VALUES = [2, 4];
 const TILE_PROBABILITIES = [0.9, 0.1];
 
 function randomTile() {
@@ -66,7 +65,7 @@ function move(board: number[][], dir: "up" | "down" | "left" | "right") {
   if (dir === "down") newBoard = reverse(transpose(newBoard));
   if (dir === "right") newBoard = reverse(newBoard);
 
-  const moved = newBoard.map(row => slideAndMerge(row));
+  let moved = newBoard.map(row => slideAndMerge(row));
 
   if (dir === "up") moved = transpose(moved);
   if (dir === "down") moved = transpose(reverse(moved));
@@ -90,7 +89,7 @@ export default function Game2048() {
     if (gameOver) return;
     const newBoard = move(board, dir);
     if (JSON.stringify(newBoard) === JSON.stringify(board)) return;
-    const addedScore = newBoard.flat().reduce((acc, val, idx, arr) => {
+    const addedScore = newBoard.flat().reduce((acc, val, idx) => {
       const prev = board.flat()[idx];
       if (val > prev) return acc + val;
       return acc;
@@ -124,7 +123,7 @@ export default function Game2048() {
   useEffect(() => {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [board, gameOver]);
+  }, [board, gameOver, handleKey]);
 
   return (
     <div className="flex flex-col items-center gap-4">
