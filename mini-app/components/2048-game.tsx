@@ -139,25 +139,31 @@ export default function Game2048() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="grid grid-cols-4 gap-2">
-        {board.flat().map((val, idx) => (
-          <div
-            key={idx}
-            className={`w-16 h-16 flex items-center justify-center rounded-md text-xl font-bold ${
-              val === 0
-                ? "bg-muted"
-                : val <= 4
-                ? "bg-pink-200 text-pink-800"
-                : val <= 8
-                ? "bg-pink-300 text-pink-800"
-                : val <= 16
-                ? "bg-pink-400 text-pink-800"
-                : "bg-pink-500 text-pink-800"
-            }`}
-          >
-            {val !== 0 ? val : null}
-          </div>
-        ))}
+      <div className="relative">
+        <div className="grid grid-cols-4 gap-2">
+          {board.flat().map((val, idx) => (
+            <div
+              key={idx}
+              className={`w-16 h-16 flex items-center justify-center rounded-md text-xl font-bold ${
+                val === 0
+                  ? "bg-muted"
+                  : val <= 4
+                  ? "bg-pink-200 text-pink-800"
+                  : val <= 8
+                  ? "bg-pink-300 text-pink-800"
+                  : val <= 16
+                  ? "bg-pink-400 text-pink-800"
+                  : "bg-pink-500 text-pink-800"
+              }`}
+            >
+              {val !== 0 ? val : null}
+            </div>
+          ))}
+        </div>
+        <div className="absolute top-0 left-0 text-4xl">🌸</div>
+        <div className="absolute top-0 right-0 text-4xl">🌺</div>
+        <div className="absolute bottom-0 left-0 text-4xl">🌼</div>
+        <div className="absolute bottom-0 right-0 text-4xl">🌻</div>
       </div>
       <div className="text-lg">Score: {score}</div>
       {gameOver && (
