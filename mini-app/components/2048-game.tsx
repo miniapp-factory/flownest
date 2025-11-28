@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Share } from "@/components/share";
 import { url } from "@/lib/metadata";
 
@@ -103,27 +102,40 @@ export default function Game2048() {
     if (!gameOver) setBoard(addRandomTile(newBoard));
   };
 
-  const handleKey = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case "ArrowUp":
-        handleMove("up");
-        break;
-      case "ArrowDown":
-        handleMove("down");
-        break;
-      case "ArrowLeft":
-        handleMove("left");
-        break;
-      case "ArrowRight":
-        handleMove("right");
-        break;
-    }
-  };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [board, gameOver, handleKey]);
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      const absDeltaX = Math.abs(deltaX);
+      const absDeltaY = Math.abs(deltaY);
+      if (Math.max(absDeltaX, absDeltaY) < 30) return;
+      if (absDeltaX > absDeltaY) {
+        if (deltaX > 0) handleMove("right");
+        else handleMove("left");
+      } else {
+        if (deltaY > 0) handleMove("down");
+        else handleMove("up");
+      }
+    };
+
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [board, gameOver, handleMove]);
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -135,23 +147,17 @@ export default function Game2048() {
               val === 0
                 ? "bg-muted"
                 : val <= 4
-                ? "bg-primary text-primary-foreground"
+                ? "bg-pink-200 text-pink-800"
                 : val <= 8
-                ? "bg-secondary text-secondary-foreground"
+                ? "bg-pink-300 text-pink-800"
                 : val <= 16
-                ? "bg-accent text-accent-foreground"
-                : "bg-destructive text-destructive-foreground"
+                ? "bg-pink-400 text-pink-800"
+                : "bg-pink-500 text-pink-800"
             }`}
           >
             {val !== 0 ? val : null}
           </div>
         ))}
-      </div>
-      <div className="flex gap-2">
-        <Button onClick={() => handleMove("up")}>↑</Button>
-        <Button onClick={() => handleMove("down")}>↓</Button>
-        <Button onClick={() => handleMove("left")}>←</Button>
-        <Button onClick={() => handleMove("right")}>→</Button>
       </div>
       <div className="text-lg">Score: {score}</div>
       {gameOver && (
