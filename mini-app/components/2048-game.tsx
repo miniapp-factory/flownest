@@ -160,10 +160,10 @@ export default function Game2048() {
             </div>
           ))}
         </div>
-        <div className="absolute top-0 left-0 text-4xl">🌸</div>
-        <div className="absolute top-0 right-0 text-4xl">🌺</div>
-        <div className="absolute bottom-0 left-0 text-4xl">🌼</div>
-        <div className="absolute bottom-0 right-0 text-4xl">🌻</div>
+        <div className="absolute -top-5 -left-5 text-4xl">🌸</div>
+        <div className="absolute -top-5 -right-5 text-4xl">🌺</div>
+        <div className="absolute -bottom-5 -left-5 text-4xl">🌼</div>
+        <div className="absolute -bottom-5 -right-5 text-4xl">🌻</div>
       </div>
       <div className="text-lg">Score: {score}</div>
       {gameOver && (
